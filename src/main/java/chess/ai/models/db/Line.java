@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Table(name = "Lines")
 public class Line {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id = 0L;
 
     @NotNull

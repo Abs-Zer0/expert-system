@@ -16,7 +16,7 @@ import java.util.List;
 public class Figure {
     @Id
     @NotBlank
-    String name;
+    String name = "figure";
     @NotNull
     @Min(1)
     Long rank = 1L;

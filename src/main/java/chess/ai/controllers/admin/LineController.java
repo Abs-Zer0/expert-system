@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
@@ -38,6 +39,9 @@ public class LineController extends BaseController {
     @PostMapping("add")
     public ModelAndView add(Model model, @ModelAttribute("line") @Valid Line line, BindingResult result, RedirectAttributes attrs) {
         if (result.hasErrors()) {
+            model.addAttribute("command", "add");
+            model.addAttribute("commandMsg", "Добавить");
+
             return OK(model, "admin/lines_edit");
         }
 
@@ -75,6 +79,9 @@ public class LineController extends BaseController {
     @PostMapping("edit")
     public ModelAndView edit(Model model, @ModelAttribute("line") @Valid Line line, BindingResult result, RedirectAttributes attrs) {
         if (result.hasErrors()) {
+            model.addAttribute("command", "edit");
+            model.addAttribute("commandMsg", "Изменить");
+
             return OK(model, "admin/lines_edit");
         }
 

@@ -1,9 +1,8 @@
 package chess.ai.controllers.admin;
 
 import chess.ai.controllers.BaseController;
-import chess.ai.models.db.Figure;
-import chess.ai.services.db.FigureService;
-import chess.ai.services.db.LineService;
+import chess.ai.models.kb.Fact;
+import chess.ai.services.kb.FactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,104 +13,97 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/admin/figures/**")
-public class FigureController extends BaseController {
-
+@RequestMapping(path = "/admin/facts/**")
+public class FactController extends BaseController {
     @Autowired
-    private FigureService figures;
-
-    @Autowired
-    private LineService lines;
+    private FactService facts;
 
     @GetMapping("/")
     public ModelAndView index(Model model) {
-        model.addAttribute("figures", figures.getAll());
+        model.addAttribute("facts", facts.getAll());
 
-        return OK(model, "admin/figures");
+        return OK(model, "admin/facts");
     }
 
     @GetMapping("add")
     public ModelAndView addView(Model model) {
-        model.addAttribute("figure", new Figure());
+        model.addAttribute("fact", new Fact());
         model.addAttribute("command", "add");
         model.addAttribute("commandMsg", "Добавить");
-        model.addAttribute("lines", lines.getAll());
 
-        return OK(model, "admin/figures_edit");
+        return OK(model, "admin/facts_edit");
     }
 
     @PostMapping("add")
-    public ModelAndView add(Model model, @ModelAttribute("figure") @Valid Figure figure, BindingResult result, RedirectAttributes attrs) {
+    public ModelAndView add(Model model, @ModelAttribute("fact") @Valid Fact fact, BindingResult result, RedirectAttributes attrs) {
         if (result.hasErrors()) {
             model.addAttribute("command", "add");
             model.addAttribute("commandMsg", "Добавить");
-            model.addAttribute("lines", lines.getAll());
 
-            return OK(model, "admin/figures_edit");
+            return OK(model, "admin/facts_edit");
         }
 
-        if (figures.isSameExist(figure)) {
+
+        if (facts.isSameExist(fact)) {
             attrs.addFlashAttribute("isError", true);
-            attrs.addFlashAttribute("errorMsg", "Такая фигура уже есть");
+            attrs.addFlashAttribute("errorMsg", "Такой факт уже есть");
 
             return Redirect("add");
         }
 
-        figures.addOrUpdate(figure);
+        facts.addOrUpdateAdmin(fact);
 
         attrs.addFlashAttribute("isSuccess", true);
-        attrs.addFlashAttribute("successMsg", "Фигура успешно добавлена");
+        attrs.addFlashAttribute("successMsg", "Факт успешно добавлен");
 
-        return Redirect("/admin/figures");
+        return Redirect("/admin/facts");
     }
 
-    @GetMapping("/admin/figures/edit/{name}")
+    @GetMapping("/admin/facts/edit/{name}")
     public ModelAndView editView(Model model, @PathVariable String name, RedirectAttributes attrs) {
         try {
-            model.addAttribute("figure", figures.get(name));
+            model.addAttribute("fact", facts.get(name));
             model.addAttribute("command", "edit");
             model.addAttribute("commandMsg", "Изменить");
-            model.addAttribute("lines", lines.getAll());
 
-            return OK(model, "admin/figures_edit");
+            return OK(model, "admin/facts_edit");
         } catch (Exception ex) {
             attrs.addFlashAttribute("isError", true);
             attrs.addFlashAttribute("errorMsg", ex.getMessage());
 
-            return Redirect("/admin/figures");
+            return Redirect("/admin/facts");
         }
     }
 
     @PostMapping("edit")
-    public ModelAndView edit(Model model, @ModelAttribute("figure") @Valid Figure figure, BindingResult result, RedirectAttributes attrs) {
+    public ModelAndView edit(Model model, @ModelAttribute("fact") @Valid Fact fact, BindingResult result, RedirectAttributes attrs) {
         if (result.hasErrors()) {
             model.addAttribute("command", "edit");
             model.addAttribute("commandMsg", "Изменить");
-            model.addAttribute("lines", lines.getAll());
 
-            return OK(model, "admin/figures_edit");
+            return OK(model, "admin/facts_edit");
         }
 
-        figures.addOrUpdate(figure);
+        facts.addOrUpdateAdmin(fact);
 
         attrs.addFlashAttribute("isSuccess", true);
-        attrs.addFlashAttribute("successMsg", "Фигура успешно изменена");
+        attrs.addFlashAttribute("successMsg", "Факт успешно изменён");
 
-        return Redirect("/admin/figures");
+        return Redirect("/admin/facts");
     }
 
-    @GetMapping("/admin/figures/remove/{name}")
+    @GetMapping("/admin/facts/remove/{name}")
     public ModelAndView remove(Model model, @PathVariable String name, RedirectAttributes attrs) {
         try {
-            figures.remove(name);
+            facts.remove(name);
 
             attrs.addFlashAttribute("isSuccess", true);
-            attrs.addFlashAttribute("successMsg", "Фигура успешно удалена");
+            attrs.addFlashAttribute("successMsg", "Факт успешно удалён");
         } catch (Exception ex) {
             attrs.addFlashAttribute("isError", true);
             attrs.addFlashAttribute("errorMsg", ex.getMessage());
         }
 
-        return Redirect("/admin/figures");
+        return Redirect("/admin/facts");
     }
 }

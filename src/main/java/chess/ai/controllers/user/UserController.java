@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/user/**")
-public class UserController extends BaseController {
+public class UserController {
     @Autowired
     private FieldService field;
     @Autowired
