@@ -1,4 +1,4 @@
-package chess.ai.controllers.admin;
+package chess.ai.controllers.expert;
 
 import chess.ai.controllers.BaseController;
 import chess.ai.models.kb.Fact;
@@ -13,8 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(path = "/admin/facts/**")
-public class FactController extends BaseController {
+@RequestMapping(path = "/expert/facts/**")
+public class ExpertFactController extends BaseController {
     @Autowired
     private FactService facts;
 
@@ -22,7 +22,7 @@ public class FactController extends BaseController {
     public ModelAndView index(Model model) {
         model.addAttribute("facts", facts.getAll());
 
-        return OK(model, "admin/facts");
+        return OK(model, "expert/facts");
     }
 
     @GetMapping("add")
@@ -31,7 +31,7 @@ public class FactController extends BaseController {
         model.addAttribute("command", "add");
         model.addAttribute("commandMsg", "Добавить");
 
-        return OK(model, "admin/facts_edit");
+        return OK(model, "expert/facts_edit");
     }
 
     @PostMapping("add")
@@ -40,7 +40,7 @@ public class FactController extends BaseController {
             model.addAttribute("command", "add");
             model.addAttribute("commandMsg", "Добавить");
 
-            return OK(model, "admin/facts_edit");
+            return OK(model, "expert/facts_edit");
         }
 
 
@@ -51,27 +51,35 @@ public class FactController extends BaseController {
             return Redirect("add");
         }
 
-        facts.addOrUpdateAdmin(fact);
+        facts.addOrUpdateExpert(fact);
 
         attrs.addFlashAttribute("isSuccess", true);
         attrs.addFlashAttribute("successMsg", "Факт успешно добавлен");
 
-        return Redirect("/admin/facts");
+        return Redirect("/expert/facts");
     }
 
-    @GetMapping("/admin/facts/edit/{name}")
+    @GetMapping("/expert/facts/edit/{name}")
     public ModelAndView editView(Model model, @PathVariable String name, RedirectAttributes attrs) {
         try {
-            model.addAttribute("fact", facts.get(name));
+            final Fact fact = facts.get(name);
+            if (!fact.getCanRemoved()) {
+                attrs.addFlashAttribute("isError", true);
+                attrs.addFlashAttribute("errorMsg", "Вы не можете изменить факт с name='" + name + "'");
+
+                return Redirect("/expert/facts");
+            }
+
+            model.addAttribute("fact", fact);
             model.addAttribute("command", "edit");
             model.addAttribute("commandMsg", "Изменить");
 
-            return OK(model, "admin/facts_edit");
+            return OK(model, "expert/facts_edit");
         } catch (Exception ex) {
             attrs.addFlashAttribute("isError", true);
             attrs.addFlashAttribute("errorMsg", ex.getMessage());
 
-            return Redirect("/admin/facts");
+            return Redirect("/expert/facts");
         }
     }
 
@@ -81,21 +89,37 @@ public class FactController extends BaseController {
             model.addAttribute("command", "edit");
             model.addAttribute("commandMsg", "Изменить");
 
-            return OK(model, "admin/facts_edit");
+            return OK(model, "expert/facts_edit");
         }
 
-        facts.addOrUpdateAdmin(fact);
+        if (!fact.getCanRemoved()) {
+            attrs.addFlashAttribute("isError", true);
+            attrs.addFlashAttribute("errorMsg", "Вы не можете изменить факт с name='" + fact.getName() + "'");
+
+            return Redirect("/expert/facts");
+        }
+
+        facts.addOrUpdateExpert(fact);
 
         attrs.addFlashAttribute("isSuccess", true);
         attrs.addFlashAttribute("successMsg", "Факт успешно изменён");
 
-        return Redirect("/admin/facts");
+        return Redirect("/expert/facts");
     }
 
-    @GetMapping("/admin/facts/remove/{name}")
+    @GetMapping("/expert/facts/remove/{name}")
     public ModelAndView remove(Model model, @PathVariable String name, RedirectAttributes attrs) {
         try {
-            facts.remove(name);
+            final Fact fact = facts.get(name);
+            if (!fact.getCanRemoved()) {
+                attrs.addFlashAttribute("isError", true);
+                attrs.addFlashAttribute("errorMsg", "Вы не можете удалить факт с name='" + name + "'");
+
+                return Redirect("/expert/facts");
+            }
+
+
+            facts.remove(fact);
 
             attrs.addFlashAttribute("isSuccess", true);
             attrs.addFlashAttribute("successMsg", "Факт успешно удалён");
@@ -104,6 +128,6 @@ public class FactController extends BaseController {
             attrs.addFlashAttribute("errorMsg", ex.getMessage());
         }
 
-        return Redirect("/admin/facts");
+        return Redirect("/expert/facts");
     }
 }

@@ -20,7 +20,7 @@
 </c:if>
 
 <div class="row m-0">
-    <div class="col-1 border border-primary pt-1 pb-1 text-center">Id</div>
+    <div class="col-1 border border-primary pt-1 pb-1 text-center">ID</div>
     <div class="col-3 border border-primary pt-1 pb-1 text-center">Короткое описание</div>
     <div class="col-1 border border-primary pt-1 pb-1 text-center">dX</div>
     <div class="col-1 border border-primary pt-1 pb-1 text-center">dY</div>

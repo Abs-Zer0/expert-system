@@ -1,7 +1,7 @@
 package chess.ai.controllers.user;
 
-import chess.ai.controllers.BaseController;
 import chess.ai.models.ExpertResult;
+import chess.ai.models.ExpertSolution;
 import chess.ai.models.db.Figure;
 import chess.ai.services.ExpertSystemService;
 import chess.ai.services.FieldService;

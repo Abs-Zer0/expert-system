@@ -1,5 +1,6 @@
 package chess.ai.services.kb;
 
+import chess.ai.models.db.Line;
 import chess.ai.models.kb.Production;
 import chess.ai.repositories.kb.ProductionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,17 @@ public class ProductionService {
         repo.delete(result);
 
         return result;
+    }
+
+    public boolean isSameExist(Production production) {
+        return repo.findByTargetAndFacts(production.getTarget(), production.getFacts()).isPresent();
+    }
+
+    public boolean isSameExistExcludeId(Production production, long id) {
+        final Optional<Production> prod = repo.findByTargetAndFacts(production.getTarget(), production.getFacts());
+        if (prod.isEmpty())
+            return false;
+
+        return id != prod.get().getId();
     }
 }

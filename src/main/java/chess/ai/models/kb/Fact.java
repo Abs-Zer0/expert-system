@@ -5,9 +5,9 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Data
 @Entity
@@ -17,8 +17,10 @@ public class Fact {
     @NotBlank
     String name = "fact";
     @NotNull
-    @Pattern(regexp = "^([A-Z][a-zA-Z]*)(,\\s*[A-Z][a-zA-Z]*)*$", message = "Must be words with a capital latter separated by a comma")
-    String args = "X";
+    @Min(1)
+    Integer argsAmount = 1;
+    @NotNull
+    Boolean isTarget = false;
     @NotNull
     Boolean canRemoved = false;
 }

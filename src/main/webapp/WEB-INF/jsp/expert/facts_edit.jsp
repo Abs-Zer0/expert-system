@@ -6,7 +6,7 @@
 
 <div class="row m-0 pb-2">
     <div class="col2 text-center">
-        <a class="btn btn-primary" href="/admin/facts">Назад</a>
+        <a class="btn btn-primary" href="/expert/facts">Назад</a>
     </div>
 </div>
 
@@ -14,7 +14,8 @@
     <div class="alert alert-danger">${errorMsg}</div>
 </c:if>
 
-<form:form class="w-100 text-center" action="/admin/facts/${command}" method="POST" modelAttribute="fact">
+<form:form class="w-100 text-center" action="/expert/facts/${command}" method="POST" modelAttribute="fact">
+    <form:checkbox path="canRemoved" class="d-none" value="${fact.getCanRemoved()}"/>
     <div class="form-group row">
         <form:label class="col-2" path="name">Название факта</form:label>
         <form:input class="form-control col-8" path="name" type="text" placeholder="name" value="${fact.getName()}"/>
@@ -29,11 +30,6 @@
         <form:label class="col-2" path="isTarget">Является целью</form:label>
         <form:checkbox class="form-control col-1" path="isTarget" value="${fact.getIsTarget()}"/>
         <form:errors class="text-danger col-2" path="isTarget"/>
-    </div>
-    <div class="form-group row">
-        <form:label class="col-2" path="canRemoved">Можно изменять эксперту</form:label>
-        <form:checkbox class="form-control col-1" path="canRemoved" value="${fact.getCanRemoved()}"/>
-        <form:errors class="text-danger col-2" path="canRemoved"/>
     </div>
     <div class="form-group">
         <button class="btn btn-primary" type="submit">${commandMsg}</button>

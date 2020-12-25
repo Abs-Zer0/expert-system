@@ -15,11 +15,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>${title}</title>
+        <link rel="stylesheet" type="text/css" href="${contextPath}/resources/css/jquery-ui.min.css"/>
         <link rel="stylesheet" type="text/css" href="${contextPath}/resources/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="${contextPath}/resources/css/bootstrap-multiselect.min.css"/>
     </head>
     <body>
         <script src="${contextPath}/resources/js/jquery-3.5.1.min.js"></script>
+        <script src="${contextPath}/resources/js/jquery-ui.min.js"></script>
         <script src="${contextPath}/resources/js/bootstrap.bundle.min.js"></script>
         <script src="${contextPath}/resources/js/bootstrap-multiselect.min.js"></script>
         <div class="container-fluid pt-2 pb-2">

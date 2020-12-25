@@ -4,8 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.Pattern;
 
 @Data
 @Entity
@@ -18,12 +17,13 @@ public class Production {
     @NotBlank
     String label = "description";
 
-    @ManyToMany
-    @JoinTable(name = "production_fact",
-            joinColumns = @JoinColumn(name = "production_facts"),
-            inverseJoinColumns = @JoinColumn(name = "fact_name"))
-    List<Fact> facts = new ArrayList<>();
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z]+\\(([A-Z][a-zA-Z]*)(,\\s*[A-Z][a-zA-Z]*)*\\)$",
+            message = "Выберите один факт из приведённых")
+    String target = "";
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    Fact target;
+    @NotBlank
+    @Pattern(regexp = "^([a-zA-Z]+\\(([A-Z][a-zA-Z]*)(,\\s*[A-Z][a-zA-Z]*)*\\))(,\\s*[a-zA-Z]+\\(([A-Z][a-zA-Z]*)(,\\s*[A-Z][a-zA-Z]*)*\\))*$",
+            message = "Перечислите факты через запятую из приведённых")
+    String facts = "";
 }

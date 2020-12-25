@@ -1,16 +1,11 @@
 package chess.ai.models;
 
-import lombok.Data;
-import lombok.NonNull;
 import lombok.Value;
 
-import java.util.List;
+import java.util.Collection;
 
 @Value
 public class ExpertResult {
-    @NonNull
-    String result;
 
-    @NonNull
-    List<String> trace;
+    Collection<ExpertSolution> solutions;
 }

@@ -160,14 +160,16 @@
             url: '/user/data',
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
-            data: JSON.stringify(field)
+            data: JSON.stringify(field.reverse())
         }).done(function (res) {
             if ($(output).hasClass('d-none'))
                 $(output).removeClass('d-none');
 
-            $(output).find('.alert.alert-primary').first().append(res.result);
+            let solution = $.makeArray(res.solutions)[0];
+            $(output).find('.alert.alert-primary').first().html(solution.result);
 
-            $.each(res.trace, function (i, e) {
+            $(output_trace).find('.card.card-body').first().html("");
+            $.each(solution.trace, function (i, e) {
                 $(output_trace).find('.card.card-body').first().append(trace_part_template(e));
             });
         }).error(function () {
